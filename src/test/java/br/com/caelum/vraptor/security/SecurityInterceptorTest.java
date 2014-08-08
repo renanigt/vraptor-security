@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.security;
 
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -27,21 +27,15 @@ public class SecurityInterceptorTest {
 	}
 	
 	@Test
-	public void shouldNotInterceptWhenMethodHasPublicAnnotation() {
+	public void shouldNotInterceptWhenMethodWithPublicAnnotation() {
 		when(method.containsAnnotation(Public.class)).thenReturn(true);
-		
-		interceptor.intercept(stack);
-		
-		verify(stack, never()).next();
+		assertFalse(interceptor.accepts());
 	}
 	
 	@Test
-	public void shouldInterceptWhenMethodDoesNotHavePublicAnnotation() {
+	public void shouldInterceptWhenMethodWithoutPublicAnnotation() {
 		when(method.containsAnnotation(Public.class)).thenReturn(false);
-		
-		interceptor.intercept(stack);
-		
-		verify(stack).next();
+		assertTrue(interceptor.accepts());
 	}
 	
 }

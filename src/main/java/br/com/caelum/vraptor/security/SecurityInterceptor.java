@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.security;
 
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
@@ -25,12 +26,12 @@ public class SecurityInterceptor {
 	}
 	
 	public void intercept(SimpleInterceptorStack stack) {
-		if(methodWithoutPublicAnnotation()) {
-			stack.next();
-		}
+		stack.next();
 	}
 
-	private boolean methodWithoutPublicAnnotation() {
+	
+	@Accepts
+	public boolean accepts() {
 		return !method.containsAnnotation(Public.class);
 	}
 	
