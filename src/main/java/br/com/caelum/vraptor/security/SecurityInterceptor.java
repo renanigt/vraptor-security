@@ -1,10 +1,5 @@
 package br.com.caelum.vraptor.security;
 
-<<<<<<< HEAD
-import javax.inject.Inject;
-
-=======
->>>>>>> Refactoring.
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -18,16 +13,9 @@ public class SecurityInterceptor {
 		stack.next();
 	}
 
-<<<<<<< HEAD
-	
-	@Accepts
-	public boolean accepts() {
-		return !method.containsAnnotation(Public.class);
-=======
 	@Accepts
 	public boolean accepts(ControllerMethod method) {
 		return !method.containsAnnotation(Public.class) || method.getController().getType().isAnnotationPresent(Public.class);
->>>>>>> Refactoring.
 	}
 	
 }
