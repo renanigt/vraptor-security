@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.security;
 
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
@@ -17,6 +19,7 @@ public class SecurityInterceptor {
 		this(null);
 	}
 
+	@Inject
 	public SecurityInterceptor(ControllerMethod method) {
 		this.method = method;
 	}
