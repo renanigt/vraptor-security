@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.security.annotation.Public;
+import br.com.caelum.vraptor.security.annotation.SafeBy;
 import br.com.caelum.vraptor.security.rule.SecurityRule;
 
 public class SecurityInterceptorTest {
@@ -23,9 +24,14 @@ public class SecurityInterceptorTest {
 	private @Mock SecurityRule rule;
 	
 	private ControllerMethod walk;
-	private ControllerMethod bankAccess;
+	private ControllerMethod emailAccess;
+	private ControllerMethod safePerson;
 	private ControllerMethod bark;
 	private ControllerMethod eat;
+	private ControllerMethod safeDog;
+	private ControllerMethod open;
+	private ControllerMethod payment;
+	private ControllerMethod safeBank;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -34,16 +40,24 @@ public class SecurityInterceptorTest {
 		interceptor = new SecurityInterceptor(rule);
 
 		walk = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("walk"));
-		bankAccess = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("bankAccess"));
+		emailAccess = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("emailAccess"));
+		safePerson = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("safePerson"));
 		bark = DefaultControllerMethod.instanceFor(DogController.class, DogController.class.getMethod("bark"));
 		eat = DefaultControllerMethod.instanceFor(DogController.class, DogController.class.getMethod("eat"));
+		safeDog = DefaultControllerMethod.instanceFor(DogController.class, DogController.class.getMethod("safeDog"));
+		open = DefaultControllerMethod.instanceFor(BankController.class, BankController.class.getMethod("open"));
+		payment = DefaultControllerMethod.instanceFor(BankController.class, BankController.class.getMethod("payment"));
+		safeBank = DefaultControllerMethod.instanceFor(BankController.class, BankController.class.getMethod("safeBank"));
 	}
 	
 	static class PersonController {
 		@Public
 		public void walk() {}
 
-		public void bankAccess() {}
+		public void emailAccess() {}
+
+		@SafeBy(SecurityRule.class)
+		public void safePerson() {}
 	}
 	
 	@Public
@@ -52,6 +66,20 @@ public class SecurityInterceptorTest {
 		
 		@Public
 		public void eat() {}
+
+		@SafeBy(SecurityRule.class)
+		public void safeDog() {}
+	}
+
+	@SafeBy(SecurityRule.class)
+	static class BankController {
+		public void open() {}
+		
+		@Public
+		public void payment() {}
+
+		@SafeBy(SecurityRule.class)
+		public void safeBank() {}
 	}
 	
 	@Test
@@ -61,17 +89,42 @@ public class SecurityInterceptorTest {
 	
 	@Test
 	public void shouldInterceptWhenMethodAndClassWithoutPublicAnnotation() {
-		assertTrue(interceptor.accepts(bankAccess));
+		assertTrue(interceptor.accepts(emailAccess));
+	}
+
+	@Test
+	public void shouldInterceptWhenMethodWithSafeByAnnotationAndClassWithout() {
+		assertTrue(interceptor.accepts(safePerson));
 	}
 	
 	@Test
-	public void shouldInterceptWhenClassWithPublicAnnotationAndMethodWithout() {
-		assertTrue(interceptor.accepts(bark));
+	public void shouldNotInterceptWhenClassWithPublicAnnotationAndMethodWithout() {
+		assertFalse(interceptor.accepts(bark));
 	}
 	
 	@Test
-	public void shouldInterceptWhenClassAndMethodWithPublicAnnotation() {
-		assertTrue(interceptor.accepts(eat));
+	public void shouldNotInterceptWhenClassAndMethodWithPublicAnnotation() {
+		assertFalse(interceptor.accepts(eat));
+	}
+
+	@Test
+	public void shouldInterceptWhenMethodWithSafeByAnnotationAndClassWithPublic() {
+		assertTrue(interceptor.accepts(safeDog));
+	}
+	
+	@Test
+	public void shouldInterceptWhenClassWithSafeByAnnotationAndMethodWithout() {
+		assertTrue(interceptor.accepts(open));
+	}
+
+	@Test
+	public void shouldNotInterceptWhenClassWithSafeByAnnotationAndMethodWithPublic() {
+		assertFalse(interceptor.accepts(payment));
+	}
+	
+	@Test
+	public void shouldInterceptWhenClassAndMethodWithSafeByAnnotationt() {
+		assertTrue(interceptor.accepts(safeBank));
 	}
 	
 	@Test
