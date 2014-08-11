@@ -2,11 +2,13 @@ package br.com.caelum.vraptor.security;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -129,20 +131,20 @@ public class SecurityInterceptorTest {
 	
 	@Test
 	public void shouldCallNextMethodWhenRuleReturnsHasParmissionTrue() {
-		Mockito.when(rule.hasPermission()).thenReturn(true);
+		when(rule.hasPermission()).thenReturn(true);
 		
 		interceptor.intercept(stack);
 		
-		Mockito.verify(stack).next();
+		verify(stack).next();
 	}
 
 	@Test
 	public void shouldNotCallNextMethodWhenRuleReturnsHasParmissionFalse() {
-		Mockito.when(rule.hasPermission()).thenReturn(false);
+		when(rule.hasPermission()).thenReturn(false);
 		
 		interceptor.intercept(stack);
 		
-		Mockito.verify(stack, Mockito.never()).next();
+		verify(stack, never()).next();
 	}
 	
 }
