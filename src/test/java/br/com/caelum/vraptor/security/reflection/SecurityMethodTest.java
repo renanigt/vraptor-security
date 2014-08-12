@@ -10,9 +10,9 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.security.SafeByRuleConstructorWithArgs;
-import br.com.caelum.vraptor.security.SafeByRuleTrue;
 import br.com.caelum.vraptor.security.annotation.SafeBy;
+import br.com.caelum.vraptor.security.rule.SafeByRuleConstructorWithArgs;
+import br.com.caelum.vraptor.security.rule.SafeByRuleTrue;
 
 public class SecurityMethodTest {
 

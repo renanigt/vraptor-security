@@ -16,6 +16,8 @@ import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.security.annotation.Public;
 import br.com.caelum.vraptor.security.annotation.SafeBy;
+import br.com.caelum.vraptor.security.rule.SafeByRuleFalse;
+import br.com.caelum.vraptor.security.rule.SafeByRuleTrue;
 import br.com.caelum.vraptor.security.rule.SecurityRule;
 
 public class SecurityInterceptorTest {

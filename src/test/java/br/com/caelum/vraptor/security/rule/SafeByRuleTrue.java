@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.security;
+package br.com.caelum.vraptor.security.rule;
 
 import br.com.caelum.vraptor.security.rule.SecurityRule;
 
