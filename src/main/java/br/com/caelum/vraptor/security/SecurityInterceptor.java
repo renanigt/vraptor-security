@@ -8,6 +8,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.security.annotation.Public;
 import br.com.caelum.vraptor.security.annotation.SafeBy;
+import br.com.caelum.vraptor.security.reflection.SecurityMethod;
 import br.com.caelum.vraptor.security.rule.SecurityRule;
 
 @Intercepts
@@ -27,8 +28,16 @@ public class SecurityInterceptor {
 		this.rule = rule;
 	}
 	
-	public void intercept(SimpleInterceptorStack stack) {
-		if(rule.hasPermission()) {
+	public void intercept(SimpleInterceptorStack stack, ControllerMethod method) {
+		SecurityMethod securityMethod = new SecurityMethod(method);
+		
+		if(securityMethod.hasSefaByAnnotation()) {
+			SecurityRule safeByRule = securityMethod.instanceForSafeByValue();
+			
+			if(safeByRule.hasPermission()) {
+				stack.next();
+			}
+		} else if(rule.hasPermission()) {
 			stack.next();
 		}
 	}

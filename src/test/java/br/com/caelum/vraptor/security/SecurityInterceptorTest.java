@@ -58,7 +58,7 @@ public class SecurityInterceptorTest {
 
 		public void emailAccess() {}
 
-		@SafeBy(SecurityRule.class)
+		@SafeBy(SafeByRuleTrue.class)
 		public void safePerson() {}
 	}
 	
@@ -69,7 +69,7 @@ public class SecurityInterceptorTest {
 		@Public
 		public void eat() {}
 
-		@SafeBy(SecurityRule.class)
+		@SafeBy(SafeByRuleFalse.class)
 		public void safeDog() {}
 	}
 
@@ -130,19 +130,33 @@ public class SecurityInterceptorTest {
 	}
 	
 	@Test
-	public void shouldCallNextMethodWhenRuleReturnsHasParmissionTrue() {
+	public void shouldCallNextMethodWhenUsingDefaultRuleAndItReturnsHasParmissionTrue() {
 		when(rule.hasPermission()).thenReturn(true);
 		
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, emailAccess);
 		
 		verify(stack).next();
 	}
 
 	@Test
-	public void shouldNotCallNextMethodWhenRuleReturnsHasParmissionFalse() {
+	public void shouldNotCallNextMethodWhenUsingDefaultRuleAndItReturnsHasParmissionFalse() {
 		when(rule.hasPermission()).thenReturn(false);
 		
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, emailAccess);
+		
+		verify(stack, never()).next();
+	}
+	
+	@Test
+	public void shouldCallNextMethodWhenUsingSafeByRuleAndItReturnsHasPermissionTrue() {
+		interceptor.intercept(stack, safePerson);
+		
+		verify(stack).next();
+	}
+
+	@Test
+	public void shouldNotCallNextMethodWhenUsingSafeByRuleAndItReturnsHasPermissionFalse() {
+		interceptor.intercept(stack, safeDog);
 		
 		verify(stack, never()).next();
 	}
