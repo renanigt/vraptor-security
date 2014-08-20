@@ -1,4 +1,4 @@
-Vraptor Security
+VRaptor Security
 ================
 
-A VRaptor Plugin to provide security for your applications.
+A simple VRaptor Plugin to provide security for your applications.
