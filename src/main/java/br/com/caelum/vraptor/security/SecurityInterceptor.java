@@ -19,7 +19,7 @@ public class SecurityInterceptor {
 	/**
 	 * @deprecated CDI eyes only.
 	 */
-	public SecurityInterceptor() {
+	protected SecurityInterceptor() {
 		this(null);
 	}
 	
