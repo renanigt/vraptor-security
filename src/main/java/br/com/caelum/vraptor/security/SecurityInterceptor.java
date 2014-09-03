@@ -44,15 +44,7 @@ public class SecurityInterceptor {
 
 	@Accepts
 	public boolean accepts(ControllerMethod method) {
-		boolean accepts = false;
-		
-		if(method.containsAnnotation(SafeBy.class)) {
-			accepts = true;
-		} else if(!method.getController().getType().isAnnotationPresent(Public.class) && !method.containsAnnotation(Public.class)) {
-			accepts = true;
-		}
-		
-		return accepts;
+		return (method.containsAnnotation(SafeBy.class)) || (!method.getController().getType().isAnnotationPresent(Public.class) && !method.containsAnnotation(Public.class));
 	}
 	
 }
