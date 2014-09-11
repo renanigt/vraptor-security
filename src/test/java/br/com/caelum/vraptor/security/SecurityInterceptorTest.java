@@ -26,6 +26,7 @@ public class SecurityInterceptorTest {
 	
 	private @Mock SimpleInterceptorStack stack;
 	private @Mock SecurityRule rule;
+	private @Mock SecurityRule defaultRule;
 	
 	private ControllerMethod walk;
 	private ControllerMethod emailAccess;
@@ -41,7 +42,7 @@ public class SecurityInterceptorTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		
-		interceptor = new SecurityInterceptor(rule);
+		interceptor = new SecurityInterceptor(rule, defaultRule);
 
 		walk = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("walk"));
 		emailAccess = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("emailAccess"));

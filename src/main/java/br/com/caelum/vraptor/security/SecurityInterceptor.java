@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
+import br.com.caelum.vraptor.security.annotation.DefaultRule;
 import br.com.caelum.vraptor.security.annotation.Public;
 import br.com.caelum.vraptor.security.annotation.SafeBy;
 import br.com.caelum.vraptor.security.reflection.SecurityMethod;
@@ -20,11 +21,11 @@ public class SecurityInterceptor {
 	 * @deprecated CDI eyes only.
 	 */
 	protected SecurityInterceptor() {
-		this(null);
+		this(null, null);
 	}
 	
 	@Inject
-	public SecurityInterceptor(SecurityRule rule) {
+	public SecurityInterceptor(SecurityRule rule, @DefaultRule SecurityRule defaultRule) {
 		this.rule = rule;
 	}
 	
