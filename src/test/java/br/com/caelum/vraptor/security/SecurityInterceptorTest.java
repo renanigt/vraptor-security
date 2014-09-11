@@ -25,7 +25,6 @@ public class SecurityInterceptorTest {
 	private SecurityInterceptor interceptor;
 	
 	private @Mock SimpleInterceptorStack stack;
-	private @Mock SecurityRule rule;
 	private @Mock SecurityRule defaultRule;
 	
 	private ControllerMethod walk;
@@ -42,7 +41,7 @@ public class SecurityInterceptorTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		
-		interceptor = new SecurityInterceptor(rule, defaultRule);
+		interceptor = new SecurityInterceptor(defaultRule);
 
 		walk = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("walk"));
 		emailAccess = DefaultControllerMethod.instanceFor(PersonController.class, PersonController.class.getMethod("emailAccess"));
@@ -134,7 +133,7 @@ public class SecurityInterceptorTest {
 	
 	@Test
 	public void shouldCallNextMethodWhenUsingDefaultRuleAndItReturnsHasParmissionTrue() {
-		when(rule.hasPermission()).thenReturn(true);
+		when(defaultRule.hasPermission()).thenReturn(true);
 		
 		interceptor.intercept(stack, emailAccess);
 		
@@ -143,7 +142,7 @@ public class SecurityInterceptorTest {
 
 	@Test
 	public void shouldNotCallNextMethodWhenUsingDefaultRuleAndItReturnsHasParmissionFalse() {
-		when(rule.hasPermission()).thenReturn(false);
+		when(defaultRule.hasPermission()).thenReturn(false);
 		
 		interceptor.intercept(stack, emailAccess);
 		

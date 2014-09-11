@@ -15,18 +15,18 @@ import br.com.caelum.vraptor.security.rule.SecurityRule;
 @Intercepts
 public class SecurityInterceptor {
 
-	private final SecurityRule rule;
+	private final SecurityRule defaultRule;
 	
 	/**
 	 * @deprecated CDI eyes only.
 	 */
 	protected SecurityInterceptor() {
-		this(null, null);
+		this(null);
 	}
 	
 	@Inject
-	public SecurityInterceptor(SecurityRule rule, @DefaultRule SecurityRule defaultRule) {
-		this.rule = rule;
+	public SecurityInterceptor(@DefaultRule SecurityRule defaultRule) {
+		this.defaultRule = defaultRule;
 	}
 	
 	public void intercept(SimpleInterceptorStack stack, ControllerMethod method) {
@@ -38,7 +38,7 @@ public class SecurityInterceptor {
 			if(safeByRule.hasPermission()) {
 				stack.next();
 			}
-		} else if(rule.hasPermission()) {
+		} else if(defaultRule.hasPermission()) {
 			stack.next();
 		}
 	}
