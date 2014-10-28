@@ -34,21 +34,17 @@ public class SecurityInterceptor {
 		SecurityMethod securityMethod = new SecurityMethod(method);
 		SecurityController securityController = new SecurityController(method);
 		
-		if(securityMethod.hasSafeByAnnotation()) {
-			SecurityRule safeByRule = securityMethod.instanceForSafeByValue();
-			
-			if(safeByRule.hasPermission()) {
-				stack.next();
-			}
-		} else if(securityController.hasSafeByAnnotation()) {
-			SecurityRule safeByRule = securityController.instanceForSafeByValue();
-			
-			if(safeByRule.hasPermission()) {
-				stack.next();
-			}
+		SecurityRule safeByRuleMethod = securityMethod.instanceForSafeByValue();
+		SecurityRule safeByRuleController = securityController.instanceForSafeByValue();
+		
+		if(securityMethod.hasSafeByAnnotation() && safeByRuleMethod.hasPermission()) {
+			stack.next();
+		} else if(securityController.hasSafeByAnnotation() && safeByRuleController.hasPermission()) {
+			stack.next();
 		} else if(defaultRule.hasPermission()) {
 			stack.next();
 		}
+		
 	}
 
 	@Accepts

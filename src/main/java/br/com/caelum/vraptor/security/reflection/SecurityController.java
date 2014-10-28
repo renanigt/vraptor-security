@@ -21,8 +21,12 @@ public class SecurityController {
 	}
 	
 	public SecurityRule instanceForSafeByValue() {
-		Class<? extends SecurityRule> clazz = controller.getAnnotation(SafeBy.class).value();
-		return new Mirror().on(clazz).invoke().constructor().withoutArgs();
+		if(hasSafeByAnnotation()) {
+			Class<? extends SecurityRule> clazz = controller.getAnnotation(SafeBy.class).value();
+			return new Mirror().on(clazz).invoke().constructor().withoutArgs();
+		}
+		
+		return null;
 	}
-	
+
 }

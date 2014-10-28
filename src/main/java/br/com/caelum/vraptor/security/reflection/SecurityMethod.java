@@ -21,8 +21,12 @@ public class SecurityMethod {
 	}
 	
 	public SecurityRule instanceForSafeByValue() {
-		Class<? extends SecurityRule> clazz = method.getMethod().getAnnotation(SafeBy.class).value();
-		return new Mirror().on(clazz).invoke().constructor().withoutArgs();
+		if(hasSafeByAnnotation()) {
+			Class<? extends SecurityRule> clazz = method.getMethod().getAnnotation(SafeBy.class).value();
+			return new Mirror().on(clazz).invoke().constructor().withoutArgs();
+		}
+		
+		return null;
 	}
 	
 }
