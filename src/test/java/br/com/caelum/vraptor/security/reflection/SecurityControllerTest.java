@@ -30,7 +30,7 @@ public class SecurityControllerTest {
 	
 	@Test
 	public void shouldReturnTrueWhenControllerHasSafeByAnnotation() {
-		assertTrue(securityController.hasSefaByAnnotation());
+		assertTrue(securityController.hasSafeByAnnotation());
 	}
 
 	@Test

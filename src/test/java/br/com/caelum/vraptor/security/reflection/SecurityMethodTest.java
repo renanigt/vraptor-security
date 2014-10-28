@@ -41,13 +41,13 @@ public class SecurityMethodTest {
 	
 	@Test
 	public void shouldReturnTrueWhenMethodHasSafeByAnnotation() {
-		assertTrue(securityMethod.hasSefaByAnnotation());
+		assertTrue(securityMethod.hasSafeByAnnotation());
 	}
 
 	@Test
 	public void shouldReturnFalseWhenMethodDoesNotHaveSafeByAnnotation() {
 		securityMethod = new SecurityMethod(walkWithoutAnnotation);
-		assertFalse(securityMethod.hasSefaByAnnotation());
+		assertFalse(securityMethod.hasSafeByAnnotation());
 	}
 	
 	@Test

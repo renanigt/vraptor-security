@@ -16,7 +16,7 @@ public class SecurityController {
 		this.controller = method.getController().getType();
 	}
 	
-	public boolean hasSefaByAnnotation() {
+	public boolean hasSafeByAnnotation() {
 		return controller.isAnnotationPresent(SafeBy.class);
 	}
 	

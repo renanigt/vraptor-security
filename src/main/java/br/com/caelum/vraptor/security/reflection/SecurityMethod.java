@@ -16,7 +16,7 @@ public class SecurityMethod {
 		this.method = method;
 	}
 	
-	public boolean hasSefaByAnnotation() {
+	public boolean hasSafeByAnnotation() {
 		return method.containsAnnotation(SafeBy.class);
 	}
 	
