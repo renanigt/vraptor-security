@@ -36,6 +36,7 @@ public class SecurityInterceptorTest {
 	private ControllerMethod open;
 	private ControllerMethod payment;
 	private ControllerMethod safeBank;
+	private ControllerMethod jump;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -52,6 +53,7 @@ public class SecurityInterceptorTest {
 		open = DefaultControllerMethod.instanceFor(BankController.class, BankController.class.getMethod("open"));
 		payment = DefaultControllerMethod.instanceFor(BankController.class, BankController.class.getMethod("payment"));
 		safeBank = DefaultControllerMethod.instanceFor(BankController.class, BankController.class.getMethod("safeBank"));
+		jump = DefaultControllerMethod.instanceFor(CatController.class, CatController.class.getMethod("jump"));
 	}
 	
 	static class PersonController {
@@ -75,15 +77,20 @@ public class SecurityInterceptorTest {
 		public void safeDog() {}
 	}
 
-	@SafeBy(SecurityRule.class)
+	@SafeBy(SafeByRuleTrue.class)
 	static class BankController {
 		public void open() {}
 		
 		@Public
 		public void payment() {}
 
-		@SafeBy(SecurityRule.class)
+		@SafeBy(SafeByRuleTrue.class)
 		public void safeBank() {}
+	}
+	
+	@SafeBy(SafeByRuleFalse.class)
+	static class CatController {
+		public void jump() {}
 	}
 	
 	@Test
@@ -150,15 +157,29 @@ public class SecurityInterceptorTest {
 	}
 	
 	@Test
-	public void shouldCallNextMethodWhenUsingSafeByRuleAndItReturnsHasPermissionTrue() {
+	public void shouldCallNextMethodWhenUsingSafeByRuleOnMethodAndItReturnsHasPermissionTrue() {
 		interceptor.intercept(stack, safePerson);
 		
 		verify(stack).next();
 	}
 
 	@Test
-	public void shouldNotCallNextMethodWhenUsingSafeByRuleAndItReturnsHasPermissionFalse() {
+	public void shouldNotCallNextMethodWhenUsingSafeByRuleOnMethodAndItReturnsHasPermissionFalse() {
 		interceptor.intercept(stack, safeDog);
+		
+		verify(stack, never()).next();
+	}
+	
+	@Test
+	public void shouldCallNextMethodWhenUsingSafeByRuleOnControllerAndItReturnsHasPermissionTrue() {
+		interceptor.intercept(stack, open);
+		
+		verify(stack).next();
+	}
+	
+	@Test
+	public void shouldNotCallNextMethodWhenUsingSafeByRuleOnControllerAndItReturnsHasPermissionFalse() {
+		interceptor.intercept(stack, jump);
 		
 		verify(stack, never()).next();
 	}

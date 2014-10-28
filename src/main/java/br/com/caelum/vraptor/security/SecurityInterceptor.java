@@ -9,6 +9,7 @@ import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.security.annotation.DefaultRule;
 import br.com.caelum.vraptor.security.annotation.Public;
 import br.com.caelum.vraptor.security.annotation.SafeBy;
+import br.com.caelum.vraptor.security.reflection.SecurityController;
 import br.com.caelum.vraptor.security.reflection.SecurityMethod;
 import br.com.caelum.vraptor.security.rule.SecurityRule;
 
@@ -31,9 +32,16 @@ public class SecurityInterceptor {
 	
 	public void intercept(SimpleInterceptorStack stack, ControllerMethod method) {
 		SecurityMethod securityMethod = new SecurityMethod(method);
+		SecurityController securityController = new SecurityController(method);
 		
 		if(securityMethod.hasSefaByAnnotation()) {
 			SecurityRule safeByRule = securityMethod.instanceForSafeByValue();
+			
+			if(safeByRule.hasPermission()) {
+				stack.next();
+			}
+		} else if(securityController.hasSefaByAnnotation()) {
+			SecurityRule safeByRule = securityController.instanceForSafeByValue();
 			
 			if(safeByRule.hasPermission()) {
 				stack.next();
@@ -45,7 +53,9 @@ public class SecurityInterceptor {
 
 	@Accepts
 	public boolean accepts(ControllerMethod method) {
-		return (method.containsAnnotation(SafeBy.class)) || (!method.getController().getType().isAnnotationPresent(Public.class) && !method.containsAnnotation(Public.class));
+		return (method.containsAnnotation(SafeBy.class)) 
+				|| (!method.getController().getType().isAnnotationPresent(Public.class) 
+				&& !method.containsAnnotation(Public.class));
 	}
 	
 }
