@@ -37,11 +37,9 @@ public class SecurityInterceptor {
 		SecurityRule safeByRuleMethod = securityMethod.instanceForSafeByValue();
 		SecurityRule safeByRuleController = securityController.instanceForSafeByValue();
 		
-		if(securityMethod.hasSafeByAnnotation() && safeByRuleMethod.hasPermission()) {
-			stack.next();
-		} else if(securityController.hasSafeByAnnotation() && safeByRuleController.hasPermission()) {
-			stack.next();
-		} else if(defaultRule.hasPermission()) {
+		if((securityMethod.hasSafeByAnnotation() && safeByRuleMethod.hasPermission())
+				|| (securityController.hasSafeByAnnotation() && safeByRuleController.hasPermission())
+				|| (defaultRule.hasPermission())) {
 			stack.next();
 		}
 		
